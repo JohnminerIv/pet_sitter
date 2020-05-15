@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h3>Pets</h3>
+  <hr>
+  {% if pets %}
+  <ul>
+
+      {% for pet in pets %}
+
+        <li> <a href="{% url 'pet_detail' pet.id %}">{{ pet.name }}</a></li>
+
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="alert alert-primary" role="alert">No pets to display.</div>
+  {% endif %}
+  {% if request.user.is_authenticated %}
+  <form method='POST'>
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <input type="submit" value="Submit">
+  </form>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{ pet.petname }}</h1>
+<p>It's species is {{ pet.species }}.
+It's breed is {{ pet.breed }}.
+It's weight in pounds is {{ pet.weight_in_pounds }}.</p>
+
+<h3>Appointments</h3>
+<hr>
+{% if appointments %}
+    {% for appointment in appointments %}
+      <div class="row">
+          <div class="col">
+              <h5>Appointment for {{ appointment.pet.name }}</h5>
+              <p>{{appointment.duration_minutes}} minutes long.</p>
+              <h6>Special instructions</h6>
+              <p>appointment.special_instructions</p>
+          </div>
+      </div>
+    {% endfor %}
+{% else %}
+  <div class="alert alert-primary" role="alert">No appointments to display.</div>
+{% endif %}
+{% if request.user.is_authenticated %}
+<form method='POST'>
+  {% csrf_token %}
+  {{ form.as_p }}
+
+  <input type="submit" value="Submit">
+</form>
+{% endif %}
+
+{% endblock %}
