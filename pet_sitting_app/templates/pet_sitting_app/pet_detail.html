@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>{{ pet.petname }}</h1>
+<h1>{{ pet.pet_name }}</h1>
 <p>It's species is {{ pet.species }}.
 It's breed is {{ pet.breed }}.
 It's weight in pounds is {{ pet.weight_in_pounds }}.</p>
@@ -12,10 +12,9 @@ It's weight in pounds is {{ pet.weight_in_pounds }}.</p>
     {% for appointment in appointments %}
       <div class="row">
           <div class="col">
-              <h5>Appointment for {{ appointment.pet.name }}</h5>
               <p>{{appointment.duration_minutes}} minutes long.</p>
               <h6>Special instructions</h6>
-              <p>appointment.special_instructions</p>
+              <p>{{ appointment.special_instructions }}</p>
           </div>
       </div>
     {% endfor %}

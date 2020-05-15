@@ -7,15 +7,15 @@
       {% for appointment in appointments %}
         <div class="row">
             <div class="col">
-                <h5>Appointment for {{ appointment.pet.name }}</h5>
-                <p>{{appointment.duration_minutes}} minutes long.</p>
+                <h5>Appointment for {{ appointment.pet.pet_name }}</h5>
+                <p>{{ appointment.duration_minutes }} minutes long.</p>
                 <h6>Special instructions</h6>
-                <p>appointment.special_instructions</p>
+                <p>{{ appointment.special_instructions }}</p>
             </div>
         </div>
       {% endfor %}
   {% else %}
-    <div class="alert alert-primary" role="alert">No pets to display.</div>
+    <div class="alert alert-primary" role="alert">No appointments to display.</div>
   {% endif %}
   {% if request.user.is_authenticated %}
   <form method='POST'>

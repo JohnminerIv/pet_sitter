@@ -10,9 +10,11 @@ class Pet(models.Model):
     weight_in_pounds = models.IntegerField()
     owner = models.ForeignKey(User, on_delete=models.CASCADE,
                               help_text="The owner of this pet.")
+    def __str__(self):
+        return str(self.pet_name)
 
 
-class Appointment(object):
+class Appointment(models.Model):
     """docstring for Appointment."""
     date_of_appointment = models.DateField()
     duration_minutes = models.IntegerField()

@@ -16,7 +16,7 @@ Must link to Pets List page & Calendar page
 
 
 def index(request):
-    return render(request, 'index.html')
+    return render(request, 'pet_sitting_app/index.html')
 
 
 """
@@ -39,7 +39,7 @@ class PetListView(LoginRequiredMixin, ListView):
             'pets': self.get_queryset().filter(owner=request.user),
             'form': PetForm(request.POST)
         }
-        return render(request, 'pets_list.html', context)
+        return render(request, 'pet_sitting_app/pet_list.html', context)
 
     def post(self, request):
         """Add a new pet."""
@@ -48,14 +48,14 @@ class PetListView(LoginRequiredMixin, ListView):
             pet = form.save(commit=False)
             pet.owner = request.user
             pet.save()
-            messages.success(request, f'{pet.name} Added')
+            messages.success(request, f'{pet.pet_name} Added')
         else:
             messages.error(request, 'Could not add your pet.')
         context = {
             'pets': self.get_queryset().filter(owner=request.user),
             'form': form,
         }
-        return render(request, 'pets_list.html', context)
+        return render(request, 'pet_sitting_app/pet_list.html', context)
 
 
 """
@@ -66,8 +66,9 @@ Should not be viewable by non-logged-in users
 """
 
 
-class PetDetailView(DetailView):
+class PetDetailView(LoginRequiredMixin, DetailView):
     """ Renders a specific page based on it's slug."""
+    login_url = reverse_lazy('login')
     model = Pet
 
     def get(self, request, pet_id):
@@ -76,7 +77,7 @@ class PetDetailView(DetailView):
           'pet': self.get_queryset().get(id=pet_id),
           'appointments': Appointment.objects.filter(pet__id=pet_id)
         }
-        return render(request, 'pet_detail.html', context)
+        return render(request, 'pet_sitting_app/pet_detail.html', context)
 
 
 """
@@ -98,14 +99,14 @@ class AppointmentListView(LoginRequiredMixin, ListView):
         context = {
             'appointments': self.get_queryset().filter(
                         date_of_appointment__gte=timezone.now()
-                        ).filter(pet__owner=request.user).order_by('pub_date'),
+                        ).filter(pet__owner=request.user).order_by('date_of_appointment'),
             'form': AppointmentForm(request.POST)
         }
-        return render(request, 'appointment_list.html', context)
+        return render(request, 'pet_sitting_app/appointment_list.html', context)
 
     def post(self, request):
         """Add a new Appointment."""
-        form = PetForm(request.POST)
+        form = AppointmentForm(request.POST)
         if form.is_valid:
             appointment = form.save(commit=False)
             appointment.save()
@@ -115,10 +116,10 @@ class AppointmentListView(LoginRequiredMixin, ListView):
         context = {
             'appointments': self.get_queryset().filter(
                         date_of_appointment__gte=timezone.now()
-                        ).filter(pet__owner=request.user).order_by('pub_date'),
+                        ).filter(pet__owner=request.user).order_by('date_of_appointment'),
             'form': form,
         }
-        return render(request, 'appointment_list.html', context)
+        return render(request, 'pet_sitting_app/appointment_list.html', context)
 
 
 """
